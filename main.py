@@ -43,6 +43,7 @@ ROOT_DIR = os.path.dirname(
                 )
         )
 
+# color randomization
 justRight = wx.Colour(239, 214, 192)
 whiteRock = wx.Colour(241, 240, 226)
 khaki = wx.Colour(238, 231, 142)

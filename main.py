@@ -52,10 +52,21 @@ downy = wx.Colour(107, 205, 156)
 twilight = wx.Colour(224, 199, 215)
 coral = wx.Colour(255, 140, 85)
 heather = wx.Colour(191, 202, 214)
-colorList = [justRight, whiteRock, khaki, poloBlue, downy, twilight, coral, heather]
+colorList = [
+        justRight,
+        whiteRock,
+        khaki,
+        poloBlue,
+        downy,
+        twilight,
+        coral,
+        heather
+        ]
 
 
-class mainDisplay(scrolled.ScrolledPanel):
+class mainDisplay(
+        scrolled.ScrolledPanel
+        ):
     """
 
     """
@@ -225,6 +236,19 @@ class mainDisplay(scrolled.ScrolledPanel):
                         30
                         )
                 )
+        self.Btn9 = wx.Button(
+                self,
+                209,
+                "TRANSCRIBE",
+                pos = (
+                        700,
+                        1050
+                        ),
+                size = (
+                        270,
+                        30
+                        )
+                )
         self.Bind(
                 wx.EVT_BUTTON,
                 self.OnQuit,
@@ -239,6 +263,11 @@ class mainDisplay(scrolled.ScrolledPanel):
                 wx.EVT_BUTTON,
                 self.OnOpen,
                 id = 203
+                )
+        self.Bind(
+                wx.EVT_BUTTON,
+                self.OnTranscribe,
+                id = 209
                 )
 
     def OnQuit(
@@ -319,7 +348,10 @@ class mainDisplay(scrolled.ScrolledPanel):
                 Path.touch(
                         fileOut
                         )
-                tableList = ['unicode.dis', 'en-ueb-g2.ctb']
+                tableList = [
+                        'unicode.dis',
+                        'en-ueb-g2.ctb'
+                        ]
                 lineLength = 40
                 with open(
                         pathname,
@@ -372,6 +404,49 @@ class mainDisplay(scrolled.ScrolledPanel):
                 wx.LogError(
                         "Cannot open file '%s'."
                         )
+
+    def OnTranscribe(self, e):
+        text = self.text.GetValue()
+        print(text)
+        tmpPath = Path("./").joinpath('brailleFile.brf')
+        Path.touch(tmpPath)
+        print(tmpPath)
+        tableList = ['en-ueb-g2.ctb']
+        lineLength = 40
+        with open(tmpPath, "wt") as OutputFile:
+            for line in text.split("\n"):
+                line2 = line.strip()
+                if len(line2) > 0:
+                    translation = louis.translateString(
+                        tableList,
+                        line2,
+                        0,
+                        0
+                        )
+                    print(translation)
+                    OutputFile.write(
+                            textwrap.fill(
+                                    translation,
+                                    lineLength,
+                                    initial_indent = '  '
+                                    )
+                            )
+                    OutputFile.write('\n')
+                OutputFile.write('\n')
+        with open(tmpPath, 'r') as brailleFile:
+            self.braille.SetValue(brailleFile.read())
+            braille = self.braille.GetValue()
+            print(braille)
+            self.braille.SetFont(
+                    wx.Font(
+                            18,
+                            wx.MODERN,
+                            wx.NORMAL,
+                            wx.BOLD,
+                            False,
+                            u'Braille29'
+                            )
+                    )
 
 
 class Transcription(

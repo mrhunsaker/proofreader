@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 # coding=utf-8
 ###############################################################################
 #    Copyright 2023 Michael Ryan Hunsaker, M.Ed., Ph.D.                       #
@@ -86,7 +87,7 @@ class mainDisplay(
                 wx.StaticLine(
                         self,
                         -1,
-                        size=(
+                        size = (
                                 2000,
                                 -1)
                         ),
@@ -98,7 +99,7 @@ class mainDisplay(
                 wx.StaticLine(
                         self,
                         -1,
-                        size=(
+                        size = (
                                 -1,
                                 2000)
                         ),
@@ -126,11 +127,11 @@ class mainDisplay(
                 self,
                 -1,
                 "TEXT INPUT",
-                pos=(
+                pos = (
                         80,
                         125
                         ),
-                size=(
+                size = (
                         720,
                         30
                         ),
@@ -140,11 +141,11 @@ class mainDisplay(
                 self,
                 -1,
                 "BRAILLE OUTPUT",
-                pos=(
+                pos = (
                         850,
                         125
                         ),
-                size=(
+                size = (
                         720,
                         30
                         ),
@@ -154,11 +155,11 @@ class mainDisplay(
                 self,
                 -1,
                 style = wx.TE_RICH2 | wx.TE_MULTILINE,
-                pos=(
+                pos = (
                         80,
                         180
                         ),
-                size=(
+                size = (
                         720,
                         800
                         )
@@ -177,11 +178,11 @@ class mainDisplay(
                 self,
                 -1,
                 style = wx.TE_RICH2 | wx.TE_MULTILINE,
-                pos=(
+                pos = (
                         850,
                         180
                         ),
-                size=(
+                size = (
                         720,
                         800
                         )
@@ -200,11 +201,11 @@ class mainDisplay(
                 self,
                 202,
                 "SAVE",
-                pos=(
+                pos = (
                         700,
                         1000
                         ),
-                size=(
+                size = (
                         70,
                         30
                         )
@@ -213,11 +214,11 @@ class mainDisplay(
                 self,
                 203,
                 "OPEN",
-                pos=(
+                pos = (
                         800,
                         1000
                         ),
-                size=(
+                size = (
                         70,
                         30
                         )
@@ -226,11 +227,11 @@ class mainDisplay(
                 self,
                 201,
                 "EXIT",
-                pos=(
+                pos = (
                         900,
                         1000
                         ),
-                size=(
+                size = (
                         70,
                         30
                         )
@@ -239,11 +240,11 @@ class mainDisplay(
                 self,
                 209,
                 "TRANSCRIBE",
-                pos=(
+                pos = (
                         700,
                         1050
                         ),
-                size=(
+                size = (
                         270,
                         30
                         )
@@ -251,31 +252,29 @@ class mainDisplay(
         self.Bind(
                 wx.EVT_BUTTON,
                 self.OnQuit,
-                id=201
+                id = 201
                 )
         self.Bind(
                 wx.EVT_BUTTON,
                 self.OnSave,
-                id=202
+                id = 202
                 )
         self.Bind(
                 wx.EVT_BUTTON,
                 self.OnOpen,
-                id=203
+                id = 203
                 )
         self.Bind(
                 wx.EVT_BUTTON,
                 self.OnTranscribe,
-                id=209
+                id = 209
                 )
-    # end def __init__
 
     def OnQuit(
             self,
             e
             ):
         wx.Exit()
-    # end def OnQuit
 
     def OnSave(
             self,
@@ -286,13 +285,12 @@ class mainDisplay(
                 self,
                 "Save braille file",
                 defaultDir,
-                wildcard="BRF files (*.brf)|*.brl",
-                style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT
+                wildcard = "BRF files (*.brf)|*.brl",
+                style = wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT
                 ) as fileDialog:
 
             if fileDialog.ShowModal() == wx.ID_CANCEL:
                 return  # the user changed their mind
-            # end if
 
             # save the current contents in the file
             pathname = fileDialog.GetPath()
@@ -303,14 +301,10 @@ class mainDisplay(
                         ) as file:
                     file.write(brailleFile)
                     file.close()
-                # end with
             except IOError:
                 wx.LogError(
                         "Cannot save current data in file '%s'." % pathname
                         )
-            # end try
-        # end with
-    # end def OnSave
 
     def OnOpen(
             self,
@@ -320,13 +314,12 @@ class mainDisplay(
                 self,
                 "Open Text file",
                 defaultDir,
-                wildcard="Text files (*.txt,*.md)|*.txt; *.md",
-                style=wx.FD_OPEN | wx.FD_FILE_MUST_EXIST
+                wildcard = "Text files (*.txt,*.md)|*.txt; *.md",
+                style = wx.FD_OPEN | wx.FD_FILE_MUST_EXIST
                 ) as fileDialog:
 
             if fileDialog.ShowModal() == wx.ID_CANCEL:
                 return  # the user changed their mind
-            # end if
 
                 # Proceed loading the file chosen by the user
             pathname = fileDialog.GetPath()
@@ -339,7 +332,6 @@ class mainDisplay(
                     self.text.SetValue(
                             file.read()
                             )
-                # end with
 
                 tmp = os.path.splitext(
                         pathname
@@ -381,16 +373,12 @@ class mainDisplay(
                                         textwrap.fill(
                                                 translation,
                                                 lineLength,
-                                                initial_indent='  '
+                                                initial_indent = '  '
                                                 )
                                         )
                                 outputFile.write(
                                         '\n'
                                         )
-                            # end if
-                        # end for
-                    # end with
-                # end with
                 with open(
                         fileOut,
                         'r'
@@ -411,15 +399,11 @@ class mainDisplay(
                                     u'Braille29'
                                     )
                             )
-                # end with
                 braillefile.close()
             except IOError:
                 wx.LogError(
                         "Cannot open file '%s'."
                         )
-            # end try
-        # end with
-    # end def OnOpen
 
     def OnTranscribe(self, e):
         text = self.text.GetValue()
@@ -444,14 +428,11 @@ class mainDisplay(
                             textwrap.fill(
                                     translation,
                                     lineLength,
-                                    initial_indent='  '
+                                    initial_indent = '  '
                                     )
                             )
                     OutputFile.write('\n')
-                # end if
                 OutputFile.write('\n')
-            # end for
-        # end with
         with open(tmpPath, 'r') as brailleFile:
             self.braille.SetValue(brailleFile.read())
             braille = self.braille.GetValue()
@@ -466,9 +447,6 @@ class mainDisplay(
                             u'Braille29'
                             )
                     )
-        # end with
-    # end def OnTranscribe
-# end class mainDisplay
 
 
 class Transcription(
@@ -489,8 +467,8 @@ class Transcription(
                 self
                 ).__init__(
                 parent,
-                title="Braille Proofreading System",
-                size=(
+                title = "Braille Proofreading System",
+                size = (
                         1650,
                         1200
                         )
@@ -511,7 +489,6 @@ class Transcription(
                         )
                 )
         self.initui()
-    # end def __init__
 
     def initui(self):
         """
@@ -526,8 +503,6 @@ class Transcription(
                 )
         self.Centre()
         self.Show(True)
-    # end def initui
-# end class Transcription
 
 
 app = wx.App()
